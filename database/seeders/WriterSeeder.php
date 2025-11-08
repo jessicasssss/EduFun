@@ -18,6 +18,18 @@ class WriterSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
 
+        $dataScienceTopics = [
+            'Machine Learning', 
+            'Deep Learning', 
+            'Natural Language Processing'
+        ];
+        
+        $networkSecurityTopics = [
+            'Software Security', 
+            'Network Administration', 
+            'Popular Network Technology'
+        ];
+
         for($i = 0; $i<2; $i++){
             $writer = Writer::create([
                 'name' => $faker->name(),
@@ -25,13 +37,23 @@ class WriterSeeder extends Seeder
                 'image'=> 'icon'.rand(1,5).'.png',
             ]);
 
-            $articleCount = rand(1,2);
+            $articleCount = rand(1,2); 
 
             for($j=0; $j<$articleCount; $j++){
+                $category = $faker->randomElement(['Data Science', 'Network Security']);
+                $title = '';
+
+                if($category === 'Data Science'){
+                    $title = $faker->randomElement($dataScienceTopics);
+                }
+                else{
+                    $title = $faker->randomElement($networkSecurityTopics);
+                }
+
                 Article::create([
-                    'title' => ucfirst($faker->words(3,true)),
+                    'title' => $title,
                     'content' => $faker->paragraph(5),
-                    'category' => $faker->randomElement(['Data Science', 'Network Security']),
+                    'category' => $category,
                     'image' => 'placeholder'. rand(1,5).'.jpg',
                     'writer_id' => $writer->id,
                 ]);
